@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "carrot"
+version = "0.1.0"
+description = ""
+authors = ["circleci <kgrid-developers@umich.edu>"]
+readme = "README.md"
+packages = [{include = "carrot", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
