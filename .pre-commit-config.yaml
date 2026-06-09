@@ -11,3 +11,5 @@ repos:
         name: Run test Poe script
         entry: uv run poe hello
         language: system
+        pass_filenames: false
+        always_run: true
