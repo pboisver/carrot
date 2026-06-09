@@ -29,8 +29,17 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 include = ["carrot*"]
 
+[tool.poe.tasks]
+# hooks = "pre-commit install"
+hello = "echo Hello, World!"
+goodbye = "echo Goodbye, World!"
+hooks = "pre-commit install"
+setup = ["hello", "goodbye", "hooks"]
+
+
 [dependency-groups]
 dev = [
+    "poethepoet>=0.46.0",
     "pre-commit>=4.6.0",
     "pytest>=9.0.3",
     "ruff>=0.15.16,<1.0.0",
