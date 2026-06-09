@@ -1,15 +1,37 @@
-[tool.poetry]
+[project]
 name = "carrot"
 version = "0.1.0"
 description = ""
-authors = ["circleci <kgrid-developers@umich.edu>"]
 readme = "README.md"
-packages = [{include = "carrot", from = "src"}]
+requires-python = ">=3.13,<4"
+authors = [{ name = "circleci", email = "kgrid-developers@umich.edu" }]
+dependencies = [
+    "typer>=0.16.0,<0.17.0",
+    "fastapi>=0.115.12,<0.116.0",
+    "uvicorn>=0.34.2,<0.35.0",
+    "pydantic-settings>=2.10.1,<3.0.0",
+    "click>=8.2.1,<9.0.0",
+    "polars>=1.33.1,<2.0.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.12"
+[project.scripts]
+carrot = "carrot.cli:cli"
 
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["carrot*"]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.6.0",
+    "pytest>=9.0.3",
+    "ruff>=0.15.16,<1.0.0",
+]

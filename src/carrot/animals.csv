@@ -1,0 +1,9 @@
+animal,can_eat_me,i_can_eat_it
+Lion,True,False
+Grizzly Bear,True,True
+Chicken,False,True
+Cow,False,True
+Shark,True,False
+Alligator,True,True
+Rabbit,False,True
+Mosquito,True,False
