@@ -3,7 +3,7 @@ name = "carrot"
 version = "0.1.0"
 description = ""
 readme = "README.md"
-requires-python = ">=3.13,<4"
+requires-python = ">=3.12,<4"
 authors = [{ name = "circleci", email = "kgrid-developers@umich.edu" }]
 dependencies = [
     "typer>=0.16.0,<0.17.0",
