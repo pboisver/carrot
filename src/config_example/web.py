@@ -1,6 +1,8 @@
 import sys
-from fastapi import FastAPI, Request, Depends
-from carrot.shared import get_shared_state
+
+from fastapi import Depends, FastAPI, Request
+
+from config_example.shared import get_shared_state
 
 app = FastAPI()
 

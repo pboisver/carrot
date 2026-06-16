@@ -1,5 +1,6 @@
-import polars as pl
 import os
+
+import polars as pl
 
 
 class DietSafetyManager:
@@ -11,11 +12,12 @@ class DietSafetyManager:
 
         self.df = pl.read_csv(csv_path)
 
-
     def get_relationship(self, animal_name):
         """Returns whether an animal can eat you, you can eat it, or both."""
         # 1. Filter using Polars syntax
-        match = self.df.filter(pl.col("animal").str.to_lowercase() == animal_name.lower())
+        match = self.df.filter(
+            pl.col("animal").str.to_lowercase() == animal_name.lower()
+        )
 
         # 2. Check if the dataframe is empty
         if match.is_empty():
@@ -34,29 +36,21 @@ class DietSafetyManager:
         else:
             return "Peaceful coexistence (neither eats the other)."
 
-
     def list_by_category(self, category):
         """Lists animals based on the category: 'me', 'animal', or 'both'."""
-        # Make sure polars is imported at the top of your file as pl
-        import polars as pl 
+        # Use the `pl` alias imported at module level
 
-        if category == 'animal':
+        if category == "animal":
             # It eats me, I don't eat it
-            filtered = self.df.filter(
-                pl.col('can_eat_me') & ~pl.col('i_can_eat_it')
-            )
-        elif category == 'me':
+            filtered = self.df.filter(pl.col("can_eat_me") & ~pl.col("i_can_eat_it"))
+        elif category == "me":
             # I eat it, it doesn't eat me
-            filtered = self.df.filter(
-                ~pl.col('can_eat_me') & pl.col('i_can_eat_it')
-            )
-        elif category == 'both':
+            filtered = self.df.filter(~pl.col("can_eat_me") & pl.col("i_can_eat_it"))
+        elif category == "both":
             # We eat each other
-            filtered = self.df.filter(
-                pl.col('can_eat_me') & pl.col('i_can_eat_it')
-            )
+            filtered = self.df.filter(pl.col("can_eat_me") & pl.col("i_can_eat_it"))
         else:
             return "Invalid category. Choose 'me', 'animal', or 'both'."
-            
+
         # Polars uses .to_list() instead of Pandas' .tolist()
-        return filtered['animal'].to_list() 
+        return filtered["animal"].to_list()

@@ -1,6 +1,7 @@
-from pydantic_settings import BaseSettings
-import typer
 from typing import Annotated
+
+import typer
+from pydantic_settings import BaseSettings
 
 app = typer.Typer()
 
@@ -32,11 +33,9 @@ def settings_defaults(settings_cls):
 
         for name, param in sig.parameters.items():
             default = getattr(settings, name, param.default)
-            if isinstance(param.default, typer.models.OptionInfo):
-                # Clone the OptionInfo with a new default
-                param = param.replace(default=default)
-            else:
-                param = param.replace(default=default)
+            # Clone the parameter with a new default value
+            # (works for OptionInfo and other defaults)
+            param = param.replace(default=default)
             new_params.append((name, param))
 
         # Build a new function signature

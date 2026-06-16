@@ -1,6 +1,7 @@
 import typer
 import uvicorn
-from carrot.shared import get_shared_state
+
+from config_example.shared import get_shared_state
 
 cli = typer.Typer()
 
@@ -24,7 +25,7 @@ def run(
     state["max_value"] = max
     state["render_value"] = render
     typer.echo(f"Context: {state}\n")
-    uvicorn.run("carrot.web:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("config_example.web:app", host="0.0.0.0", port=8000, reload=True)
 
 
 if __name__ == "__main__":

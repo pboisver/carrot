@@ -1,6 +1,7 @@
-from pydantic_settings import BaseSettings
-import typer
 from inspect import signature
+
+import typer
+from pydantic_settings import BaseSettings
 
 app = typer.Typer()
 
@@ -23,38 +24,35 @@ def settings_defaults(settings_cls):
     """
     settings = settings_cls()
 
-    # Capture env_prefix from Pydantic config
     env_prefix = getattr(settings_cls.Config, "env_prefix", "") or ""
+
+    def _compute_default(name, param):
+        env_val = getattr(settings, name, None)
+        if env_val is not None:
+            return env_val
+        if param.default is not param.empty:
+            return param.default
+        return ...
+
+    def _apply_option_default(param, env_name, new_default):
+        if not isinstance(param.default, typer.models.OptionInfo):
+            return param.replace(default=new_default)
+
+        opt_info = param.default
+        opt_kwargs = opt_info.__dict__.copy()
+        if not opt_kwargs.get("envvar"):
+            opt_kwargs["envvar"] = env_name
+        opt_kwargs["default"] = new_default
+        return param.replace(default=typer.models.OptionInfo(**opt_kwargs))
 
     def decorator(func):
         sig = signature(func)
         new_params = []
 
         for name, param in sig.parameters.items():
-            env_val = getattr(settings, name, None)
             env_name = f"{env_prefix}{name}".upper()
-
-            # Determine default: env_val if set, else keep required/defined
-            if env_val is not None:
-                new_default = env_val
-            else:
-                new_default = param.default if param.default is not param.empty else ...
-
-            # If it's a Typer Option, add envvar if not already set
-            if isinstance(param.default, typer.models.OptionInfo):
-                # Merge existing OptionInfo kwargs with envvar + new default
-                opt_info = param.default
-                opt_kwargs = opt_info.__dict__.copy()
-
-                # Avoid overriding if user manually set envvar
-                if "envvar" not in opt_kwargs or not opt_kwargs["envvar"]:
-                    opt_kwargs["envvar"] = env_name
-
-                opt_kwargs["default"] = new_default
-                param = param.replace(default=typer.models.OptionInfo(**opt_kwargs))
-            else:
-                param = param.replace(default=new_default)
-
+            new_default = _compute_default(name, param)
+            param = _apply_option_default(param, env_name, new_default)
             new_params.append((name, param))
 
         func.__signature__ = sig.replace(parameters=[p for _, p in new_params])
