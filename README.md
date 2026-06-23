@@ -22,19 +22,19 @@ git clone https://github.com/pboisver/carrot.git
 cd carrot
 ```
 
-2. Install `uv` if needed:
+1. Install `uv` if needed:
 
 ```bash
 pip install uv
 ```
 
-3. Install dependencies:
+1. Install dependencies:
 
 ```bash
 uv install
 ```
 
-4. Install the package in editable mode (recommended for development):
+1. Install the package in editable mode (recommended for development):
 
 ```bash
 uv pip install -e .
@@ -42,7 +42,7 @@ uv pip install -e .
 
 > If you only need dependencies for the project, `uv install` is sufficient. Use `uv pip install -e .` afterwards when you want the local package available in editable mode.
 
-4. Use the package from Python:
+1. Use the package from Python:
 
 ```python
 from carrot.diet_safety import DietSafetyManager
